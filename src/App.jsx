@@ -26,13 +26,15 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import errorCodesMap from "./utils/errorCodes";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 
 function App() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const toast = useToast();
+
+  const navigate = useNavigate();
 
   const login = async (e) => {
     e.preventDefault();
@@ -68,13 +70,17 @@ function App() {
 
         toast({
           title: "Successfully created user",
+          description:
+            "You will be redirected in 5 seconds to your unique url. Copy it and share with friends.",
           status: "success",
           duration: 5000,
           isClosable: true,
         });
-      }
 
-      redirect(`/${username}`);
+        setTimeout(() => {
+          navigate(`/${username}`);
+        }, 5000);
+      }
     } catch (error) {
       toast({
         title: "Error",
@@ -84,8 +90,6 @@ function App() {
         isClosable: true,
       });
     }
-
-    const usersRef = collection(firebaseDb, "users");
   };
 
   return (

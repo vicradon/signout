@@ -14,6 +14,7 @@ import {
   Input,
   OrderedList,
   useToast,
+  Image,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import MainLayout from "../Layout/Main";
@@ -95,41 +96,52 @@ export default function Sign() {
 
       <div id="tshirt-div">
         <Box as="form" onSubmit={addText}>
-          <Flex alignItems={"flex-end"} columnGap={4}>
+          <Flex
+            flexDirection={{ base: "column", md: "row" }}
+            alignItems={"flex-end"}
+            columnGap={4}
+          >
             <FormControl>
               <FormLabel>{username}'s goodwill message</FormLabel>
               <Input
+                width={{ base: "100%" }}
                 type="text"
                 value={message}
                 onChange={({ target }) => setMessage(target.value)}
               />
             </FormControl>
 
-            <Button display={"inline-block"} type="submit">
+            <Button
+              marginTop={{ base: "10px", md: 0 }}
+              display={"inline-block"}
+              type="submit"
+            >
               Add
             </Button>
           </Flex>
         </Box>
 
-        <img src={tshirtBG} alt="t-shirt" />
+        <Image margin={"20px 0"} src={tshirtBG} alt="t-shirt" />
 
         <div id="drawingArea" className="drawing-area">
           <div className="canvas-container">
-            <FabricJSCanvas
+            {/* <FabricJSCanvas
               id={"canvas"}
               className="sample-canvas"
               onReady={onReady}
-            />
+            /> */}
+
+            <canvas id="canvas" width="200" height="400"></canvas>
           </div>
         </div>
 
-        <Box>
+        {/* <Box>
           <Heading as="h3" size="md" mb="4">
             All Messages
           </Heading>
 
           <OrderedList>{}</OrderedList>
-        </Box>
+        </Box> */}
       </div>
     </MainLayout>
   );
