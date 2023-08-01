@@ -11,14 +11,14 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/sign",
+    path: "/:username",
     element: <Sign />,
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ChakraProvider theme={theme}>
+    <ChakraProvider>
       <RouterProvider router={router} />
     </ChakraProvider>
   </StrictMode>
