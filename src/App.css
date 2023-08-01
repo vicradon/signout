@@ -22,7 +22,7 @@
   background-color: #fff;
 }
 
-#canvas {
+#tshirt-canvas {
   position: absolute;
   width: 200px;
   height: 300px;
@@ -30,4 +30,18 @@
   top: 0px;
   user-select: none;
   cursor: default;
+}
+
+/* add media query for 400px and below */
+
+@media screen and (max-width: 400px) {
+  .drawing-area {
+    height: 200px;
+  }
+
+  .upper-canvas  {
+    height: 10px !important;
+  }
+
+
 }

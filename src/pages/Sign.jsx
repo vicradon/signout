@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../App.css";
 import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
+import { fabric } from "fabric";
 import tshirtBG from "../assets/t-shirt1.webp";
 import {
   Box,
@@ -33,6 +34,7 @@ import { firebaseDb } from "../utils/firebase.config";
 
 export default function Sign() {
   const { username } = useParams();
+  const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const { editor, onReady } = useFabricJSEditor();
   const onAddCircle = () => {
@@ -43,13 +45,30 @@ export default function Sign() {
     editor?.addRectangle();
   };
 
+  const [newTextPosition, setNewTextPosition] = useState({ x: 20, y: 50 });
+
   const toast = useToast();
 
   const addText = async (event) => {
     event.preventDefault();
 
     try {
-      editor?.addText(message);
+      const canvas = new fabric.Canvas("tshirt-canvas");
+
+      const newMessages = [
+        ...messages,
+        { message, x: newTextPosition.x, y: newTextPosition.y },
+      ];
+
+      setMessages(newMessages);
+
+      canvas.add(
+        new fabric.Text(message, {
+          left: newTextPosition.x,
+          top: newTextPosition.y,
+          fontSize: 10,
+        })
+      );
 
       const collectionRef = collection(firebaseDb, COLLECTION_PATH);
       const q = query(collectionRef, where("username", "==", username));
@@ -75,6 +94,13 @@ export default function Sign() {
         created_at: new Date(),
       });
 
+      toast({
+        title: `You have signed on ${username}'s shirt!`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
       setMessage("");
     } catch (error) {
       console.log(error.message);
@@ -93,6 +119,7 @@ export default function Sign() {
       <Text margin={"1rem 0"} fontWeight={"regular"} fontSize={"xl"}>
         Sign for {username}
       </Text>
+      <Text fontSize={"xs"}>You can only add one message</Text>
 
       <div id="tshirt-div">
         <Box as="form" onSubmit={addText}>
@@ -131,7 +158,7 @@ export default function Sign() {
               onReady={onReady}
             /> */}
 
-            <canvas id="canvas" width="200" height="400"></canvas>
+            <canvas id="tshirt-canvas" width="200" height="400"></canvas>
           </div>
         </div>
 
